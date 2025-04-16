@@ -127,7 +127,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 KEYCLOAK_EXEMPT_URIS = []
 
 KEYCLOAK_CONFIG = {
-    'SERVER_URL': 'http://localhost:8080/auth',
+    'SERVER_URL': 'http://localhost:8080',
     'REALM_NAME': 'myrealm',
     'CLIENT_ID': '2',
     'CLIENT_SECRET_KEY': "kWDMG9dclFhCVtjLpM64LERR3AhDT7tw",
@@ -136,8 +136,6 @@ KEYCLOAK_CONFIG = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
         'config.keycloak_auth.KeycloakAuthentication',
     ),
 }

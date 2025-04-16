@@ -7,7 +7,6 @@ from config.settings import KEYCLOAK_CONFIG
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.permissions import IsAuthenticated
-from config.keycloak_auth import KeycloakAuthentication
 
 
 class KeycloakLoginView(APIView):
@@ -35,12 +34,10 @@ class KeycloakLoginView(APIView):
 class BookListCreate(ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    authentication_classes = [KeycloakAuthentication]
     permission_classes = [IsAuthenticated]
 
 
 class BookRetrieveUpdateDestroy(RetrieveUpdateDestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    authentication_classes = [KeycloakAuthentication]
     permission_classes = [IsAuthenticated]
