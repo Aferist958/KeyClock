@@ -1,6 +1,8 @@
 from rest_framework import authentication, exceptions
 from keycloak import KeycloakOpenID
 from django.conf import settings
+from django.contrib.auth import get_user_model
+
 
 class KeycloakAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
@@ -24,24 +26,11 @@ class KeycloakAuthentication(authentication.BaseAuthentication):
             
             if not introspect['active']:
                 raise exceptions.AuthenticationFailed('Invalid token')
-                
-            user = self.get_or_create_user(userinfo)
+            
+            user_model = get_user_model()
+            user = user_model.objects.get(username=userinfo['preferred_username'])
             
             return (user, None)
             
         except Exception as e:
             raise exceptions.AuthenticationFailed(str(e))
-    
-    def get_or_create_user(self, userinfo):
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
-        
-        try:
-            user = User.objects.get(username=userinfo['preferred_username'])
-        except User.DoesNotExist:
-            user = User.objects.create_user(
-                username=userinfo['preferred_username'],
-                email=userinfo.get('email', ''),
-            )
-        
-        return user
